@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -177,8 +178,24 @@ public class JFInterseccao extends javax.swing.JFrame {
             vi = retas.get(i).esq.get(2)+"";
                   
             //System.out.println("teste: "+retas.get(i).dir);
-            modeloSimplex.addRow(new String []{pontoX,pontoY,vi});
+            modeloSimplex.addRow(new String []{pontoX,pontoY});
+            //colocando o valor de vi na coluna correta
+            modeloSimplex.setValueAt(vi, i, i+2);
+            //colocando o valor da direita da reta na coluna R da tabela
+            modeloSimplex.setValueAt(retas.get(i).dir, i, indice+2);
+            
         }
+        /*
+        try {
+            BufferedWriter br = new BufferedWriter(new FileWriter("resultado.txt"));
+            
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JFInterseccao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(JFInterseccao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */
         
     }//GEN-LAST:event_jBSimplexActionPerformed
       
