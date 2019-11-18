@@ -166,9 +166,20 @@ public class JFInterseccao extends javax.swing.JFrame {
         String [] linha = new String[indice+3];
         
         //Verifica se as equações precisam de uma variável de folga e o qual tipo
-        for (int i = 0; i < retas.size(); i++) {
+        for (int i = 0; i < indice; i++) {
+            String pontoX = "";
+            String pontoY = "";
+            String vi = "";
+            
             verificarVF(retas.get(i));
-        }       
+            pontoX = retas.get(i).esq.get(0)+"";
+            pontoY = retas.get(i).esq.get(1)+"";
+            vi = retas.get(i).esq.get(2)+"";
+                  
+            //System.out.println("teste: "+retas.get(i).dir);
+            modeloSimplex.addRow(new String []{pontoX,pontoY,vi});
+        }
+        
     }//GEN-LAST:event_jBSimplexActionPerformed
       
     //Adiciona uma variável de folga à equação, se necessário
