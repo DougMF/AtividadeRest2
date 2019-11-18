@@ -176,7 +176,12 @@ public class JFInterseccao extends javax.swing.JFrame {
             pontoX = retas.get(i).esq.get(0)+"";
             pontoY = retas.get(i).esq.get(1)+"";
             vi = retas.get(i).esq.get(2)+"";
-                  
+            if(pontoX.equals("0.0")){
+                pontoX = "1x";
+            }
+            if(pontoY.equals("0.0")){
+                pontoY = "1y";
+            }
             //System.out.println("teste: "+retas.get(i).dir);
             modeloSimplex.addRow(new String []{pontoX,pontoY});
             //colocando o valor de vi na coluna correta
