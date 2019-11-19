@@ -45,7 +45,7 @@ public class Sintaxe {
     //Analisa a string informada e extrai o termo para uma classe "Termo",
     public Termo analisarTermo(String termo){
         int sinal = 1;
-        String var = "", num = "0";
+        String var = "", num = "";
         float coef;
         
         //Define o sinal do termo
@@ -66,7 +66,10 @@ public class Sintaxe {
             }
         }
         
-        coef = Float.parseFloat(num);
+        if(num.isEmpty())
+            coef = 1;
+        else
+            coef = Float.parseFloat(num);
         
         return new Termo(coef * sinal, var);
     }

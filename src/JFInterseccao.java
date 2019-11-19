@@ -161,47 +161,32 @@ public class JFInterseccao extends javax.swing.JFrame {
             modeloSimplex.addColumn("v" + (i+1));
         }
         
-        modeloSimplex.addColumn("R");
-        
-        //Linha que será adicionada na tabela
-        String [] linha = new String[indice+3];
+        modeloSimplex.addColumn("R");    
         
         //Verifica se as equações precisam de uma variável de folga e o qual tipo
         for (int i = 0; i < indice; i++) {
             String pontoX = "";
             String pontoY = "";
-            String vi = "";
+            String vi = "";         
             
             verificarVF(retas.get(i));
             pontoX = retas.get(i).esq.get(0)+"";
             pontoY = retas.get(i).esq.get(1)+"";
             vi = retas.get(i).esq.get(2)+"";
-            if(pontoX.equals("0.0")){
-                pontoX = "1x";
-            }
-            if(pontoY.equals("0.0")){
-                pontoY = "1y";
-            }
-            //System.out.println("teste: "+retas.get(i).dir);
-            modeloSimplex.addRow(new String []{pontoX,pontoY});
+            
+            //System.out.println("teste: "+retas.get(i).dir);    
+            modeloSimplex.addRow(new String[]{pontoX, pontoY});           
+                        
             //colocando o valor de vi na coluna correta
             modeloSimplex.setValueAt(vi, i, i+2);
             //colocando o valor da direita da reta na coluna R da tabela
             modeloSimplex.setValueAt(retas.get(i).dir, i, indice+2);
             
+            for (int x = 0; x < modeloSimplex.getColumnCount(); x++) {
+                if(modeloSimplex.getValueAt(i, x) == null)
+                    modeloSimplex.setValueAt("0", i, x);
+            }            
         }
-        /*
-        try {
-            BufferedWriter br = new BufferedWriter(new FileWriter("resultado.txt"));
-            
-            
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(JFInterseccao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(JFInterseccao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
-        
     }//GEN-LAST:event_jBSimplexActionPerformed
       
     //Adiciona uma variável de folga à equação, se necessário
@@ -219,7 +204,7 @@ public class JFInterseccao extends javax.swing.JFrame {
     public void inserirReta(String reta){
         reta = reta.replaceAll(" ", "").toLowerCase();
                 
-        if((reta.contains("<=") || reta.contains(">=") || reta.contains("=")) 
+        if((reta.contains("<=") || reta.contains(">=")) 
                 && !reta.endsWith("=") && !reta.startsWith("=")){
             indice++;
             modeloRetas.addRow(new String[]{indice+"",reta});
@@ -245,6 +230,8 @@ public class JFInterseccao extends javax.swing.JFrame {
         jTFReta.setText("");
         retas.clear();
         indice = 0;
+        modeloSimplex.setColumnCount(2);
+        jBSimplex.setEnabled(false);
     }//GEN-LAST:event_jBLimparActionPerformed
 
     private void jBLerArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLerArquivoActionPerformed
