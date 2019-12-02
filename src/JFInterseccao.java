@@ -17,8 +17,11 @@ public class JFInterseccao extends javax.swing.JFrame {
     DefaultTableModel modeloSimplex;
     int indice = 0; //Índice a ser exibido nas tabelas
     ArrayList<Reta> retas = new ArrayList<>();
+    Reta funcaoObj = new Reta();
     Sintaxe sintaxe;
     Operacoes operacoes;
+    int colunaAtual, linhaAtual;
+    float matriz[][];
     
     public JFInterseccao() {
         initComponents();
@@ -44,17 +47,20 @@ public class JFInterseccao extends javax.swing.JFrame {
         jBSimplex = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTRetas = new javax.swing.JTable();
-        jBInserir = new javax.swing.JButton();
+        jBInserirObj = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTSimplex = new javax.swing.JTable();
         jBLimpar = new javax.swing.JButton();
         jBLerArquivo = new javax.swing.JButton();
+        jTFFuncaoObj = new javax.swing.JTextField();
+        jBInserirRest = new javax.swing.JButton();
+        jLFuncObj = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
 
-        jTFReta.setBorder(javax.swing.BorderFactory.createTitledBorder("Reta"));
+        jTFReta.setBorder(javax.swing.BorderFactory.createTitledBorder("Restrição"));
         jTFReta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTFRetaKeyPressed(evt);
@@ -78,10 +84,10 @@ public class JFInterseccao extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTRetas);
 
-        jBInserir.setText("Inserir");
-        jBInserir.addActionListener(new java.awt.event.ActionListener() {
+        jBInserirObj.setText("Inserir");
+        jBInserirObj.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBInserirActionPerformed(evt);
+                jBInserirObjActionPerformed(evt);
             }
         });
 
@@ -109,6 +115,18 @@ public class JFInterseccao extends javax.swing.JFrame {
             }
         });
 
+        jTFFuncaoObj.setBorder(javax.swing.BorderFactory.createTitledBorder("Função objetivo"));
+
+        jBInserirRest.setText("Inserir");
+        jBInserirRest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBInserirRestActionPerformed(evt);
+            }
+        });
+
+        jLFuncObj.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLFuncObj.setText("Função objetivo:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -118,33 +136,51 @@ public class JFInterseccao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jBLimpar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTFReta, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jBSimplex))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTFFuncaoObj, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBInserirObj)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLFuncObj)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBLerArquivo)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBInserir)
+                        .addComponent(jTFReta, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBLimpar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBSimplex)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBLerArquivo)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jBInserirRest)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTFReta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBInserirObj)
+                            .addComponent(jTFFuncaoObj))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFReta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBInserirRest)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBLerArquivo)
                     .addComponent(jBSimplex)
-                    .addComponent(jBInserir)
                     .addComponent(jBLimpar)
-                    .addComponent(jBLerArquivo))
+                    .addComponent(jLFuncObj))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -170,9 +206,9 @@ public class JFInterseccao extends javax.swing.JFrame {
             String vi = "";         
             
             verificarVF(retas.get(i));
-            pontoX = retas.get(i).esq.get(0)+"";
-            pontoY = retas.get(i).esq.get(1)+"";
-            vi = retas.get(i).esq.get(2)+"";
+            pontoX = retas.get(i).esq.get(0).coef+"";
+            pontoY = retas.get(i).esq.get(1).coef+"";
+            vi = retas.get(i).esq.get(2).coef+"";
             
             //System.out.println("teste: "+retas.get(i).dir);    
             modeloSimplex.addRow(new String[]{pontoX, pontoY});           
@@ -180,13 +216,19 @@ public class JFInterseccao extends javax.swing.JFrame {
             //colocando o valor de vi na coluna correta
             modeloSimplex.setValueAt(vi, i, i+2);
             //colocando o valor da direita da reta na coluna R da tabela
-            modeloSimplex.setValueAt(retas.get(i).dir, i, indice+2);
+            modeloSimplex.setValueAt(retas.get(i).dir.get(0).coef, i, indice+2);
             
             for (int x = 0; x < modeloSimplex.getColumnCount(); x++) {
                 if(modeloSimplex.getValueAt(i, x) == null)
                     modeloSimplex.setValueAt("0", i, x);
             }            
         }
+        
+        modeloSimplex.addRow(new String[]{funcaoObj.esq.get(0).coef+"",funcaoObj.esq.get(1).coef+""});
+        for (int x = 2; x < modeloSimplex.getColumnCount(); x++) {
+            modeloSimplex.setValueAt("0", modeloSimplex.getRowCount() -1,x );
+        }
+        montarMatriz();
     }//GEN-LAST:event_jBSimplexActionPerformed
       
     //Adiciona uma variável de folga à equação, se necessário
@@ -197,10 +239,54 @@ public class JFInterseccao extends javax.swing.JFrame {
             reta.esq.add(new Termo(1, "vf"));        
     }
     
-    private void jBInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInserirActionPerformed
-        inserirReta(jTFReta.getText());        
-    }//GEN-LAST:event_jBInserirActionPerformed
+    private void jBInserirObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInserirObjActionPerformed
+        if(!jTFFuncaoObj.getText().isEmpty()){        
+            String funcObj = jTFFuncaoObj.getText();            
+            jLFuncObj.setText("Função objetivo: " + funcObj);
+            funcObj = jTFFuncaoObj.getText() + "=0";
+            funcObj = funcObj.replaceAll(" ", "").toLowerCase().replace("z=", "");
+            
+            funcaoObj = sintaxe.extrairTermos(funcObj);
+            System.out.println(""+funcaoObj);
+            jBInserirObj.setEnabled(false);
+            
+            //trocar valores para negativo
+            funcaoObj.esq.get(0).coef *= -1;
+            funcaoObj.esq.get(1).coef *= -1;
+        }else
+            JOptionPane.showMessageDialog(this, "Uma equação deve ser informada!");
+        
+        
+    }//GEN-LAST:event_jBInserirObjActionPerformed
 
+    public void montarMatriz(){
+        matriz = new float[modeloSimplex.getRowCount()][modeloSimplex.getColumnCount()];
+        
+        for (int i = 0; i < modeloSimplex.getRowCount(); i++) {
+            for (int j = 0; j < modeloSimplex.getColumnCount(); j++) {
+                matriz[i][j] = Float.parseFloat(modeloSimplex.getValueAt(i,  j)+"");
+                System.out.print(matriz[i][j]+" ");
+            }
+            System.out.println("");
+        }
+        
+    }
+    
+    //Dividir a coluna "resultado" pela coluna do pivot
+    public void dividirResultadoPivo(){
+        
+    }
+    
+    //Diagonalizar a matriz
+    public void diagonalizar(){
+        
+    }
+    
+    //Tornar o pivô um dividindo sua linha por ele mesmo
+    public void tornarPivoUm(){
+        
+    }
+            
     public void inserirReta(String reta){
         reta = reta.replaceAll(" ", "").toLowerCase();
                 
@@ -249,6 +335,10 @@ public class JFInterseccao extends javax.swing.JFrame {
             Logger.getLogger(JFInterseccao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jBLerArquivoActionPerformed
+
+    private void jBInserirRestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInserirRestActionPerformed
+        inserirReta(jTFReta.getText());    
+    }//GEN-LAST:event_jBInserirRestActionPerformed
     
     //Cria uma cópia da reta para preservar a reta original
     public Reta copiarReta(Reta reta){
@@ -299,12 +389,15 @@ public class JFInterseccao extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jBInserir;
+    private javax.swing.JButton jBInserirObj;
+    private javax.swing.JButton jBInserirRest;
     private javax.swing.JButton jBLerArquivo;
     private javax.swing.JButton jBLimpar;
     private javax.swing.JButton jBSimplex;
+    private javax.swing.JLabel jLFuncObj;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTFFuncaoObj;
     private javax.swing.JTextField jTFReta;
     private javax.swing.JTable jTRetas;
     private javax.swing.JTable jTSimplex;
